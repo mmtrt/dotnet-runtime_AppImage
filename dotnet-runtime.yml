@@ -8,7 +8,7 @@ ingredients:
   packages:
     - dotnet-runtime-8.0
   script:
-    - VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v7.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
+    - VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v8.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
     - echo $VERSION > VERSION
     - $(wget -q "https://avatars.githubusercontent.com/u/9141961?s=200&v=4" -O dotnet-runtime.png)
     - cat > dotnet-runtime.desktop <<EOF
