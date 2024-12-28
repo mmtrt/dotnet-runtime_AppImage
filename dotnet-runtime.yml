@@ -1,10 +1,10 @@
 app: dotnet-runtime
 
 ingredients:
-  dist: bionic
+  dist: focal
   sources:
-    - deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe
-    - deb https://packages.microsoft.com/ubuntu/18.04/prod bionic main
+    - deb http://us.archive.ubuntu.com/ubuntu/ focal main universe
+    - deb https://packages.microsoft.com/ubuntu/20.04/prod focal main
   packages:
     - dotnet-runtime-8.0
   script:
