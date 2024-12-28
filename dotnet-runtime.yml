@@ -6,7 +6,7 @@ ingredients:
     - deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe
     - deb https://packages.microsoft.com/ubuntu/18.04/prod bionic main
   packages:
-    - dotnet-runtime-7.0
+    - dotnet-runtime-8.0
   script:
     - VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v7.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
     - echo $VERSION > VERSION
