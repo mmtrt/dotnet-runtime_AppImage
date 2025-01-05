@@ -28,7 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt-get -y install desktop-file-utils libfuse2
+          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
           wget -q "https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage"
           bash -ex pkg2appimage dotnet-runtime.yml
           echo $PWD
@@ -56,7 +56,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt-get -y install desktop-file-utils libfuse2
+          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
           wget -q "https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage"
           sed -i 's|avatars.*"|github.com/mmtrt/cncra2yr/raw/master/snap/gui/cncra2yr.png"|' dotnet-runtime.yml
           bash -ex pkg2appimage dotnet-runtime.yml
