@@ -1,14 +1,14 @@
 app: dotnet-runtime
 
 ingredients:
-  dist: bionic
+  dist: focal
   sources:
-    - deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe
-    - deb https://packages.microsoft.com/ubuntu/18.04/prod bionic main
+    - deb http://us.archive.ubuntu.com/ubuntu/ focal main universe
+    - deb https://packages.microsoft.com/ubuntu/20.04/prod focal main
   packages:
-    - dotnet-runtime-7.0
+    - dotnet-runtime-8.0
   script:
-    - VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v7.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
+    - VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v8.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
     - echo $VERSION > VERSION
     - $(wget -q "https://avatars.githubusercontent.com/u/9141961?s=200&v=4" -O dotnet-runtime.png)
     - cat > dotnet-runtime.desktop <<EOF
