@@ -28,7 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
+          sudo apt-get -y install zsync desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
           wget -q "https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage"
           bash -ex pkg2appimage dotnet-runtime.yml
           export ARCH="$(uname -m)"
@@ -41,6 +41,7 @@ jobs:
           UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|test|*$ARCH.AppImage.zsync"
           ./uruntime-lite --appimage-addupdinfo "$UPINFO"
           ./uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp --compression zstd:level=22 -S26 -B8 --header uruntime-lite -i ./dotnet-runtime/dotnet-runtime.AppDir -o ./dotnet-runtime-"$VERSION"-"$ARCH".AppImage
+          zsyncmake *.AppImage -u *.AppImage
           echo $PWD
           ls -al
 
@@ -51,5 +52,5 @@ jobs:
           automatic_release_tag: test
           prerelease: false
           draft: false
-          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/dotnet-runtime-*-$ARCH.AppImage
+          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/dotnet-runtime-*-$ARCH.AppImage*
           repo_token: ${{ secrets.PATN }}
