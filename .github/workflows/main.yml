@@ -28,9 +28,20 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
+          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat zsync
           wget -q "https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage"
           bash -ex pkg2appimage dotnet-runtime.yml
+          export ARCH="$(uname -m)"
+          UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|continuous|*$ARCH.AppImage.zsync"
+          VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v8.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
+          URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
+          URUNTIME_LITE="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-lite-$ARCH"
+          wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime
+          wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O ./uruntime-lite
+          chmod +x ./uruntime*
+          ./uruntime-lite --appimage-addupdinfo "$UPINFO"
+          ./uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp --compression zstd:level=22 -S26 -B8 --header uruntime-lite -i ./dotnet-runtime/dotnet-runtime.AppDir -o ./dotnet-runtime-"$VERSION"-"$ARCH".AppImage
+          zsyncmake *.AppImage -u *.AppImage
           echo $PWD
 
       - name: Release
@@ -40,7 +51,7 @@ jobs:
           automatic_release_tag: continuous
           prerelease: false
           draft: false
-          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/out/dotnet-runtime-*-x86_64.AppImage
+          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/*.AppImage*
           repo_token: ${{ secrets.PATN }}
 
   # This workflow contains a single job called "build"
@@ -56,10 +67,21 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build AppImage
         run: |
-          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat
+          sudo apt-get -y install desktop-file-utils libfuse2 graphicsmagick-imagemagick-compat zsync
           wget -q "https://raw.githubusercontent.com/AppImage/pkg2appimage/master/pkg2appimage"
           sed -i 's|avatars.*"|github.com/mmtrt/cncra2yr/raw/master/snap/gui/cncra2yr.png"|' dotnet-runtime.yml
           bash -ex pkg2appimage dotnet-runtime.yml
+          export ARCH="$(uname -m)"
+          UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|yr-asset|*$ARCH.AppImage.zsync"
+          VERSION=$(wget -qO- "https://github.com/dotnet/runtime/tags" | grep -Eo /v8.* | sed 's|"| |;s|/v||g' | head -1 | awk '{print $1}')
+          URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
+          URUNTIME_LITE="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-lite-$ARCH"
+          wget --retry-connrefused --tries=30 "$URUNTIME" -O ./uruntime
+          wget --retry-connrefused --tries=30 "$URUNTIME_LITE" -O ./uruntime-lite
+          chmod +x ./uruntime*
+          ./uruntime-lite --appimage-addupdinfo "$UPINFO"
+          ./uruntime --appimage-mkdwarfs -f --set-owner 0 --set-group 0 --no-history --no-create-timestamp --compression zstd:level=22 -S26 -B8 --header uruntime-lite -i ./dotnet-runtime/dotnet-runtime.AppDir -o ./dotnet-runtime-"$VERSION"-"$ARCH".AppImage
+          zsyncmake *.AppImage -u *.AppImage
           echo $PWD
 
       - name: Release
@@ -69,5 +91,5 @@ jobs:
           automatic_release_tag: yr-asset
           prerelease: false
           draft: false
-          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/out/dotnet-runtime-*-x86_64.AppImage
+          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/*.AppImage*
           repo_token: ${{ secrets.PATN }}
