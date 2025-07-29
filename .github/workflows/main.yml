@@ -52,5 +52,5 @@ jobs:
           automatic_release_tag: test
           prerelease: false
           draft: false
-          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/dotnet-runtime-*-$ARCH.AppImage*
+          files: /home/runner/work/dotnet-runtime_AppImage/dotnet-runtime_AppImage/*.AppImage*
           repo_token: ${{ secrets.PATN }}
